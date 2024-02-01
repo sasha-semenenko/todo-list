@@ -1,8 +1,8 @@
 {% extends 'task_and_tags/index.html' %}
 
 {% block content %}
-  <h1>Delete Tag</h1>
-  <p>Are you sure you want to delete tag name: {{ tag.name }}</p>
+  <h1>Delete Task</h1>
+  <p>Are you sure you want to delete task with content: {{ task.content }}</p>
   <p>All task with this tag will be also deleted</p>
   <form action="" method="post">
     {% csrf_token %}

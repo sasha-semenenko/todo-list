@@ -21,7 +21,58 @@
          {% endblock %}
       </div>
       <div class="col-sm-10">
-        {% block content %}{% endblock %}
+        {% block content %}
+          <h1>
+            <strong>TODO list</strong>
+            <a style="float: right" href="{% url 'task_and_tags:task-create' %}">Add task</a>
+          </h1>
+          {% if tasks_list %}
+            {% for task in tasks_list %}
+
+              <div>
+                <p>
+                  <strong>
+                    {{ task.content }}
+                    {% if task.task_is_done %}
+                      <i style="color: green">Done</i>
+                    {% else %}
+                      <i style="color: red">Not done</i>
+                    {% endif %}
+                  </strong>
+                  <form action="{% url 'task_and_tags:task-change-status' pk=task.id %}" method="post">
+                    {% csrf_token %}
+                    {% if task.task_is_done %}
+                      <input
+                          style="background-color: gray;
+                          float: right"
+                          class="btn btn-basic"
+                          type="submit"
+                          value="Undo">
+                    {% else %}
+                      <input
+                          style="color: green;
+                          float: right"
+                          class="btn btn-success"
+                          type="submit"
+                          value="Complete">
+                    {% endif %}
+                  </form>
+                </p>
+                <p>Created at: <i>{{ task.datetime }}</i>. Task should be done until: <i>{{ task.done_task_until_date }}</i></p>
+                <p>
+                  Tags:
+                  {% for tag in task.tags.all %}
+                     {{ tag }}
+                  {% endfor %}
+                  <a href="{% url 'task_and_tags:task-update' pk=task.id%}">Update</a>
+                  <a href="{% url 'task_and_tags:task-delete' pk=task.id%}">Delete</a>
+                </p>
+              </div>
+
+
+            {% endfor %}
+          {% endif %}
+        {% endblock %}
       </div>
     </div>
   </div>
