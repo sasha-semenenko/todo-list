@@ -12,7 +12,7 @@ class Tasks(models.Model):
     datetime = models.DateField()
     done_task_until_date = models.DateField(blank=True)
     task_is_done = models.BooleanField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, related_name="tags")
 
     class Meta:
         ordering = ["task_is_done"]

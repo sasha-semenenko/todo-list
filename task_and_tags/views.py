@@ -64,14 +64,7 @@ class TaskChangeStatus(generic.UpdateView):
 
         task = get_object_or_404(Tasks, pk=kwargs["pk"])
 
-        if not task.task_is_done:
-            task.task_is_done = True
-            task.save()
-
-            return redirect("task_and_tags:home-page")
-
-        else:
-            task.task_is_done = False
-            task.save()
+        task.task_is_done = not task.task_is_done
+        task.save()
 
         return redirect("task_and_tags:home-page")
