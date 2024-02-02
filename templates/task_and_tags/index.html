@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TODO list</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width-device-width, initial-scale-1">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+        crossorigin="anonymous">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2">
+         {% block sidebar %}
+           <ul class="sidebar-nav list-group">
+             <li class="list-group-item"><a href="{% url 'task_and_tags:home-page' %}">Home</a></li>
+             <li class="list-group-item"><a href="{% url 'task_and_tags:tag-list' %}">Tags</a></li>
+           </ul>
+         {% endblock %}
+      </div>
+      <div class="col-sm-10">
+        {% block content %}
+          <h1>
+            <strong>TODO list</strong>
+            <a style="float: right" href="{% url 'task_and_tags:task-create' %}">Add task</a>
+          </h1>
+          {% if tasks_list %}
+            {% for task in tasks_list %}
+
+              <div>
+                <p>
+                  <strong>
+                    {{ task.content }}
+                    {% if task.task_is_done %}
+                      <i style="color: green">Done</i>
+                    {% else %}
+                      <i style="color: red">Not done</i>
+                    {% endif %}
+                  </strong>
+                  <form action="{% url 'task_and_tags:task-change-status' pk=task.id %}" method="post">
+                    {% csrf_token %}
+                    {% if task.task_is_done %}
+                      <input
+                          style="background-color: gray;
+                          float: right"
+                          class="btn btn-basic"
+                          type="submit"
+                          value="Undo">
+                    {% else %}
+                      <input
+                          style="color: green;
+                          float: right"
+                          class="btn btn-success"
+                          type="submit"
+                          value="Complete">
+                    {% endif %}
+                  </form>
+                </p>
+                <p>Created at: <i>{{ task.datetime }}</i>. Task should be done until: <i>{{ task.done_task_until_date }}</i></p>
+                <p>
+                  Tags:
+                  {% for tag in task.tags.all %}
+                     {{ tag }}
+                  {% endfor %}
+                  <a href="{% url 'task_and_tags:task-update' pk=task.id%}">Update</a>
+                  <a href="{% url 'task_and_tags:task-delete' pk=task.id%}">Delete</a>
+                </p>
+              </div>
+
+
+            {% endfor %}
+          {% endif %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

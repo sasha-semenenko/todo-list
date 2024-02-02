@@ -1,0 +1,11 @@
+{% extends 'task_and_tags/index.html' %}
+
+{% block content %}
+  <h1>Delete Tag</h1>
+  <p>Are you sure you want to delete tag name: {{ tag.name }}</p>
+  <p>All task with this tag will be also deleted</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Yes, delete" class="btn btn-danger">
+  </form>
+{% endblock %}
